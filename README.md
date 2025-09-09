@@ -343,6 +343,6 @@ If this project helped you, please give it a ⭐️ on GitHub and share it with 
 
 ---
 
-**Built with ❤️ for the Investment Banking Community**
+**Built for the Investment Banking Community**
 
-*Last Updated: September 2024*
+*Last Updated: September 2025*
