@@ -279,7 +279,7 @@ def optimized_error_handler(func):
             
             # Show user-friendly error
             st.error(f"⚠️ An error occurred (ID: {error_id}). Please try again or contact support.")
-[O            return None
+            return None
     return wrapper
 
 # Memory management
