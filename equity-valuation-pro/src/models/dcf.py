@@ -238,7 +238,7 @@ class DCFModel:
         return self.valuation_results
     
     def sensitivity_analysis(self, 
-[O                           wacc_range: List[float] = None,
+[O                           wacc_range: List[float] = None,
                            terminal_growth_range: List[float] = None) -> pd.DataFrame:
         """
         Perform sensitivity analysis on key variables
