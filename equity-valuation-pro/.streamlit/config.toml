@@ -20,5 +20,5 @@ gatherUsageStats = false         # Privacy: don't collect usage stats
 
 [client]
 # Client configuration
-caching = true                   # Enable caching for better performance
+# Note: caching option has been removed as it's deprecated
 showErrorDetails = false         # Hide error details in production

@@ -10,6 +10,11 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 
+# Force UTF-8 encoding for Windows
+if os.name == 'nt':  # Windows
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+
 def check_dependencies():
     """Check if all required dependencies are installed"""
     required_packages = [

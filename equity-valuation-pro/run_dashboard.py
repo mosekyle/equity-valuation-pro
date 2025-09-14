@@ -9,6 +9,13 @@ import subprocess
 import webbrowser
 import time
 from datetime import datetime
+import io
+
+# Fix console encoding - ADD THIS AT THE VERY TOP OF THE FILE
+if sys.stdout.encoding != 'UTF-8':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
 
 def print_banner():
     """Print application banner"""
@@ -181,7 +188,7 @@ def show_menu():
     print("   2. 🛠️  Run Setup First")
     print("   3. 📊 Launch with Sample Data")
     print("   4. 🧪 Run Tests")
-[O    print("   5. 📖 Show Documentation")
+    print("   5. 📖 Show Documentation")
     print("   6. ❌ Exit")
     print()
     
