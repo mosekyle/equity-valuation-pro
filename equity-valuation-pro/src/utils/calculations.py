@@ -266,4 +266,295 @@ class FinancialCalculations:
         Returns:
             Dict[str, List[float]]: Simulation results
         """
-        np.random.seed(42)  # For
+        np.random.seed(42)  # For reproducibility
+        
+        results = {
+            'valuations': [],
+            'revenue_growth': [],
+            'operating_margin': [],
+            'discount_rate': [],
+            'terminal_growth': []
+        }
+        
+        for _ in range(num_simulations):
+            # Generate random variations for each assumption
+            simulation_assumptions = {}
+            
+            for key, base_value in base_assumptions.items():
+                if key in volatility_ranges:
+                    std_dev = volatility_ranges[key]
+                    # Use normal distribution with base value as mean
+                    simulated_value = np.random.normal(base_value, std_dev)
+                    
+                    # Apply reasonable bounds
+                    if key == 'terminal_growth':
+                        simulated_value = max(0.005, min(0.05, simulated_value))  # 0.5% to 5%
+                    elif key == 'discount_rate':
+                        simulated_value = max(0.05, min(0.20, simulated_value))   # 5% to 20%
+                    elif key == 'operating_margin':
+                        simulated_value = max(0.01, min(0.50, simulated_value))   # 1% to 50%
+                    elif key == 'revenue_growth':
+                        simulated_value = max(-0.20, min(0.50, simulated_value))  # -20% to 50%
+                    
+                    simulation_assumptions[key] = simulated_value
+                else:
+                    simulation_assumptions[key] = base_value
+            
+            # Store simulation parameters
+            results['revenue_growth'].append(simulation_assumptions.get('revenue_growth', 0))
+            results['operating_margin'].append(simulation_assumptions.get('operating_margin', 0))
+            results['discount_rate'].append(simulation_assumptions.get('discount_rate', 0))
+            results['terminal_growth'].append(simulation_assumptions.get('terminal_growth', 0))
+            
+            # Calculate valuation for this simulation (simplified DCF)
+            # This would typically call your full DCF model with these assumptions
+            try:
+                # Simplified valuation calculation
+                base_revenue = simulation_assumptions.get('base_revenue', 100000)
+                growth = simulation_assumptions.get('revenue_growth', 0.05)
+                margin = simulation_assumptions.get('operating_margin', 0.15)
+                discount_rate = simulation_assumptions.get('discount_rate', 0.10)
+                terminal_growth = simulation_assumptions.get('terminal_growth', 0.025)
+                
+                # 5-year projection
+                revenues = []
+                for year in range(5):
+                    revenue = base_revenue * ((1 + growth) ** year)
+                    revenues.append(revenue)
+                
+                # Calculate FCFs (simplified)
+                fcfs = [rev * margin * 0.7 for rev in revenues]  # Simplified FCF calculation
+                
+                # Terminal value
+                terminal_fcf = fcfs[-1] * (1 + terminal_growth)
+                terminal_value = terminal_fcf / (discount_rate - terminal_growth)
+                pv_terminal = terminal_value / ((1 + discount_rate) ** 5)
+                
+                # Present value of FCFs
+                pv_fcfs = sum([fcf / ((1 + discount_rate) ** (i+1)) for i, fcf in enumerate(fcfs)])
+                
+                enterprise_value = pv_fcfs + pv_terminal
+                valuation_per_share = enterprise_value / simulation_assumptions.get('shares_outstanding', 1000)
+                
+                results['valuations'].append(valuation_per_share)
+                
+            except (ZeroDivisionError, ValueError):
+                # Handle edge cases where calculation fails
+                results['valuations'].append(0)
+        
+        return results
+    
+    @staticmethod
+    def calculate_sensitivity_analysis(base_valuation_func,
+                                     variable_ranges: Dict[str, List[float]],
+                                     base_assumptions: Dict) -> pd.DataFrame:
+        """
+        Perform sensitivity analysis on key variables
+        
+        Args:
+            base_valuation_func: Function that calculates valuation
+            variable_ranges (Dict): Ranges for each variable to test
+            base_assumptions (Dict): Base case assumptions
+            
+        Returns:
+            pd.DataFrame: Sensitivity analysis results
+        """
+        sensitivity_results = []
+        
+        for var_name, var_range in variable_ranges.items():
+            for var_value in var_range:
+                # Create modified assumptions
+                modified_assumptions = base_assumptions.copy()
+                modified_assumptions[var_name] = var_value
+                
+                # Calculate valuation with modified assumption
+                try:
+                    valuation = base_valuation_func(modified_assumptions)
+                    base_valuation = base_valuation_func(base_assumptions)
+                    
+                    change_percent = ((valuation - base_valuation) / base_valuation) * 100
+                    
+                    sensitivity_results.append({
+                        'variable': var_name,
+                        'value': var_value,
+                        'valuation': valuation,
+                        'change_percent': change_percent
+                    })
+                except:
+                    continue
+        
+        return pd.DataFrame(sensitivity_results)
+    
+    @staticmethod
+    def calculate_beta(stock_returns: pd.Series, 
+                      market_returns: pd.Series,
+                      period_days: int = 252) -> float:
+        """
+        Calculate stock beta vs market
+        
+        Args:
+            stock_returns (pd.Series): Daily stock returns
+            market_returns (pd.Series): Daily market returns
+            period_days (int): Period for calculation (default: 1 year = 252 days)
+            
+        Returns:
+            float: Beta coefficient
+        """
+        # Align the series and take last period_days
+        aligned_data = pd.concat([stock_returns, market_returns], axis=1).dropna()
+        
+        if len(aligned_data) < 50:  # Minimum data requirement
+            return 1.0  # Default beta
+        
+        # Take last period_days of data
+        recent_data = aligned_data.tail(period_days)
+        stock_rets = recent_data.iloc[:, 0]
+        market_rets = recent_data.iloc[:, 1]
+        
+        # Calculate beta using covariance method
+        covariance = np.cov(stock_rets, market_rets)[0][1]
+        market_variance = np.var(market_rets)
+        
+        if market_variance == 0:
+            return 1.0
+        
+        beta = covariance / market_variance
+        return beta
+    
+    @staticmethod
+    def calculate_sharpe_ratio(returns: pd.Series, 
+                             risk_free_rate: float = 0.02) -> float:
+        """
+        Calculate Sharpe ratio
+        
+        Args:
+            returns (pd.Series): Return series
+            risk_free_rate (float): Risk-free rate (annualized)
+            
+        Returns:
+            float: Sharpe ratio
+        """
+        if len(returns) == 0:
+            return 0.0
+        
+        # Convert to daily risk-free rate
+        daily_rf_rate = risk_free_rate / 252
+        
+        excess_returns = returns - daily_rf_rate
+        
+        if excess_returns.std() == 0:
+            return 0.0
+        
+        # Annualize
+        sharpe = (excess_returns.mean() * 252) / (excess_returns.std() * np.sqrt(252))
+        return sharpe
+    
+    @staticmethod
+    def calculate_var(returns: pd.Series, 
+                     confidence_level: float = 0.05) -> float:
+        """
+        Calculate Value at Risk (VaR)
+        
+        Args:
+            returns (pd.Series): Return series
+            confidence_level (float): Confidence level (default: 5% for 95% VaR)
+            
+        Returns:
+            float: VaR as a positive number
+        """
+        if len(returns) == 0:
+            return 0.0
+        
+        var = np.percentile(returns, confidence_level * 100)
+        return abs(var)
+
+
+class ComparableAnalysis:
+    """
+    Handles comparable company analysis calculations
+    """
+    
+    @staticmethod
+    def calculate_peer_multiples(peer_data: Dict[str, Dict]) -> pd.DataFrame:
+        """
+        Calculate multiples for peer companies
+        
+        Args:
+            peer_data (Dict): Dictionary of peer company data
+            
+        Returns:
+            pd.DataFrame: Peer multiples comparison
+        """
+        multiples_data = []
+        
+        for symbol, data in peer_data.items():
+            try:
+                financials = data.get('financial_metrics', {})
+                basic_info = data.get('basic_info', {})
+                
+                multiples_data.append({
+                    'symbol': symbol,
+                    'company_name': basic_info.get('company_name', symbol),
+                    'market_cap': basic_info.get('market_cap', 0),
+                    'pe_ratio': financials.get('pe_ratio', 0),
+                    'forward_pe': financials.get('forward_pe', 0),
+                    'ev_to_ebitda': financials.get('ev_to_ebitda', 0),
+                    'price_to_book': financials.get('price_to_book', 0),
+                    'price_to_sales': financials.get('price_to_sales', 0),
+                    'debt_to_equity': financials.get('debt_to_equity', 0),
+                    'roe': financials.get('return_on_equity', 0),
+                    'profit_margin': financials.get('profit_margin', 0)
+                })
+            except Exception as e:
+                continue
+        
+        df = pd.DataFrame(multiples_data)
+        
+        # Add statistical measures
+        if not df.empty:
+            numeric_columns = df.select_dtypes(include=[np.number]).columns
+            summary_stats = df[numeric_columns].describe()
+            
+            return df, summary_stats
+        
+        return df, pd.DataFrame()
+    
+    @staticmethod
+    def calculate_implied_valuation(target_multiples: Dict,
+                                  peer_stats: pd.DataFrame,
+                                  target_financials: Dict) -> Dict[str, float]:
+        """
+        Calculate implied valuation based on peer multiples
+        
+        Args:
+            target_multiples (Dict): Target company current multiples
+            peer_stats (pd.DataFrame): Peer companies statistics
+            target_financials (Dict): Target company financials
+            
+        Returns:
+            Dict[str, float]: Implied valuations using different multiples
+        """
+        implied_values = {}
+        
+        # Revenue-based valuation
+        if 'price_to_sales' in peer_stats.index:
+            median_ps = peer_stats.loc['50%', 'price_to_sales']
+            revenue = target_financials.get('revenue', 0)
+            if revenue > 0:
+                implied_values['ps_valuation'] = median_ps * revenue
+        
+        # Earnings-based valuation
+        if 'pe_ratio' in peer_stats.index:
+            median_pe = peer_stats.loc['50%', 'pe_ratio']
+            net_income = target_financials.get('net_income', 0)
+            if net_income > 0:
+                implied_values['pe_valuation'] = median_pe * net_income
+        
+        # Book value-based valuation
+        if 'price_to_book' in peer_stats.index:
+            median_pb = peer_stats.loc['50%', 'price_to_book']
+            book_value = target_financials.get('book_value', 0)
+            if book_value > 0:
+                implied_values['pb_valuation'] = median_pb * book_value
+        
+        return implied_values
