@@ -617,10 +617,9 @@ def main():
         if "DCF Model" in analysis_sections:
             build_dcf_model_interface()
         
-        # Comparable Analysis (placeholder)
+        # Comparable Analysis
         if "Comparable Analysis" in analysis_sections:
-            st.markdown('<div class="section-header">🔍 Comparable Analysis</div>', unsafe_allow_html=True)
-            st.info("📝 Comparable analysis feature coming soon! This will include automated peer selection and multiple analysis.")
+            st.session_state.comps_dashboard.render_main_interface(company_data['symbol'])
     
     else:
         # Welcome screen
