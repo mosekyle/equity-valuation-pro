@@ -633,7 +633,12 @@ def main():
                 <li>📊 <strong>Real-time market data</strong> from Yahoo Finance</li>
                 <li>🧮 <strong>Professional DCF modeling</strong> with scenario analysis</li>
                 <li>📈 <strong>Interactive price charts</strong> and technical indicators</li>
-                <li>🔍 <strong>Comparable company analysis</strong> (coming soon)</li>
+                <li>🔍 <strong>Comparable company analysis</strong> with peer benchmarking</li>
+                <li>🤖 <strong>Machine Learning valuation</strong> models</li>
+                <li>🏢 <strong>LBO analysis</strong> for private equity scenarios</li>
+                <li>📰 <strong>Sentiment analysis</strong> from news and social media</li>
+                <li>⚡ <strong>Real options valuation</strong> for growth opportunities</li>
+                <li>⚠️ <strong>Risk analytics</strong> and stress testing</li>
                 <li>📋 <strong>Professional reporting</strong> and export capabilities</li>
             </ul>
             
