@@ -302,14 +302,9 @@ python -m pytest tests/
   author = {Moses Giatu},
   title = {Equity Valuation Dashboard: Professional-Grade Investment Analysis Platform},
   url = {https://github.com/mosekyle/equity-valuation-dashboard},
-  year = {2024}
+  year = {2025}
 }
 ```
-
-### **Media Coverage**
-- Featured in [Your University] Finance Newsletter
-- Presented at [Conference Name] Student Research Symposium
-- Winner of [Hackathon Name] Best Financial Technology Award
 
 ---
 
@@ -324,8 +319,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### **Project Maintainer**
 **Your Name**  
 📧 Email: moseskyle2021@gmail.com  
-🔗 LinkedIn: [linkedin.com/in/yourprofile](https://linkedin.com/in/gitau-moses-kiarie)  
-🐦 Twitter: [@yourusername](https://twitter.com/mose_kyle)
+🔗 LinkedIn: [linkedin.com/in/moses-gitau-kiarie](https://www.linkedin.com/in/moses-gitau-kiarie/)  
+🐦 Twitter: [@moses__kyle](https://twitter.com/moses__kyle)
 
 ### **Support**
 - 🐛 **Bug Reports**: [Create an Issue](https://github.com/mosekyle/equity-valuation-dashboard/issues)
