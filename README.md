@@ -259,7 +259,7 @@ We welcome contributions from the community! Here's how to get started:
 ### **Development Setup**
 ```bash
 # Fork the repository and clone your fork
-git clone https://github.com/yourusername/equity-valuation-dashboard.git
+git clone https://github.com/mosekyle/equity-valuation-dashboard.git
 
 # Create a feature branch
 git checkout -b feature/your-feature-name
@@ -299,9 +299,9 @@ python -m pytest tests/
 ### **Academic Citations**
 ```bibtex
 @software{equity_valuation_dashboard,
-  author = {Your Name},
+  author = {Moses Giatu},
   title = {Equity Valuation Dashboard: Professional-Grade Investment Analysis Platform},
-  url = {https://github.com/yourusername/equity-valuation-dashboard},
+  url = {https://github.com/mosekyle/equity-valuation-dashboard},
   year = {2024}
 }
 ```
@@ -323,14 +323,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### **Project Maintainer**
 **Your Name**  
-📧 Email: your.email@domain.com  
-🔗 LinkedIn: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)  
+📧 Email: moseskyle2021@gmail.com  
+🔗 LinkedIn: [linkedin.com/in/yourprofile](https://linkedin.com/in/gitau-moses-kiarie)  
 🐦 Twitter: [@yourusername](https://twitter.com/mose_kyle)
 
 ### **Support**
-- 🐛 **Bug Reports**: [Create an Issue](https://github.com/yourusername/equity-valuation-dashboard/issues)
-- 💡 **Feature Requests**: [Discussion Forum](https://github.com/yourusername/equity-valuation-dashboard/discussions)
-- 📖 **Documentation**: [Wiki](https://github.com/yourusername/equity-valuation-dashboard/wiki)
+- 🐛 **Bug Reports**: [Create an Issue](https://github.com/mosekyle/equity-valuation-dashboard/issues)
+- 💡 **Feature Requests**: [Discussion Forum](https://github.com/mosekyle/equity-valuation-dashboard/discussions)
+- 📖 **Documentation**: [Wiki](https://github.com/mosekyle/equity-valuation-dashboard/wiki)
 
 ---
 
@@ -339,11 +339,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 If this project helped you, please give it a ⭐️ on GitHub and share it with your network!
 
 ### **Star History**
-[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/equity-valuation-dashboard&type=Date)](https://star-history.com/#yourusername/equity-valuation-dashboard&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/equity-valuation-dashboard&type=Date)](https://star-history.com/#mosekyle/equity-valuation-dashboard&Date)
 
 ---
 
 **Built for the Investment Banking Community**
 
-*Last Updated: September 2025*
+*Last Updated: Decemeber 2025*
 
