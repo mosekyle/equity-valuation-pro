@@ -1,0 +1,24 @@
+[global]
+# Global configuration for Streamlit app
+
+[theme]
+# App theme settings
+primaryColor = "#1f77b4"           # Blue for financial theme
+backgroundColor = "#ffffff"        # Clean white background
+secondaryBackgroundColor = "#f0f2f6"  # Light gray for sidebars
+textColor = "#262730"             # Dark text for readability
+
+[server]
+# Server configuration
+headless = true                   # Run in headless mode for deployment
+port = 8501                      # Default port
+address = "0.0.0.0"              # Allow external connections
+
+[browser]
+# Browser settings
+gatherUsageStats = false         # Privacy: don't collect usage stats
+
+[client]
+# Client configuration
+# Note: caching option has been removed as it's deprecated
+showErrorDetails = false         # Hide error details in production
